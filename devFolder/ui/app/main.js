@@ -79,47 +79,100 @@
                 /**
                   *  Finished meta-functions
                   */
+
+                /*
+                 * findConstituentEx()
+                 *
+                 * STATUS: Complete!!!! Do not modify
+                 *
+                 * Finds a test sample for formatting
+                 * Input:
+                 * Output: data to http scope
+                 */
                 function findConstituentEx() {
+                  // Grabs a random constituent
                   $http.get('/api/constituents/' + ($scope["constituentcodes0"].value[4999].constituent_id).toString()
                   ).then(
                     function (res) {
+                      // Output data to Http
                       $scope.constituent = res.data;
                       $scope.isReady = true;
                     }
                   );
                 }
+
+                /*
+                 * findConstituent(constituentId)
+                 *
+                 * STATUS: Complete!!!! Do not modify
+                 *
+                 * Finds and prints to console information for single constituent
+                 * Input: var constituentId
+                 * Output: data to http scope
+                 */
                 function findConstituent(constituentId) {
+                  // Finds constituent given ID
                   $http.get('/api/constituents/' + constituentId.toString()
                   ).then(
                     function (res) {
+                      // Output data to Http
                       $scope.constituent = res.data;
                       $scope.isReady = true;
                     }
                   );
                 }
+
+                /*
+                 * aquireLists(offset)
+                 *
+                 * STATUS: Complete!!!! Do not modify
+                 *
+                 * Congregates a list of all constiuent IDs
+                 * Input: var offset
+                 * Output: List of IDs to scope.constituentcodes# (bulk of 5000)
+                 *         Returns number of constituents
+                 */
                 function aquireLists(offset) {
                   $http.get('/api/constituentcodes/' + (offset*5000).toString()
                   ).then(
                     function (res) {
+                      // Dynamically create variable names
                       var string = 'constituentcodes' + offset.toString();
                       $scope[string] = res.data;
                       $scope.isReady = true;
+                      // Recursively aquire lists until empty
                       if($scope[string].count > ((offset+1)*5000)){
                         aquireLists((offset+1));
                         return;
                       }
+                      // Outputs number of total constituent codes
                       return $scope['constituentcodes0'].count
                     }
                   );
                 };
+
+                /*
+                 * changeName(constituentId, first)
+                 *
+                 * STATUS: Complete!!!! Do not modify
+                 *
+                 * Changes the first name of the given constituent
+                 * Input: var constituentId
+                 *        var first
+                 * Output: change to http scope
+                 */
                 function changeName(constituentId, first) {
+                  // Fetches name to print
                     $http.get('/api/constituents/firstname/pre/' + constituentId.toString()).then(
                       function () {
+                        // Changes the first name of the same constituent
                         $http.patch('/api/constituents/firstname/' + constituentId.toString() + '-' + first
                         ).then(
                           function () {
+                            // Fetches constituent again to confirm change
                             $http.get('/api/constituents/firstname/post/' + constituentId.toString()).then(
                               function (res) {
+                                // data to http scope
                                 $scope.constituent = res.data;
                                 $scope.isReady = true;
                               }
@@ -188,6 +241,7 @@
                                   updateMidInitial();
                                   return;
                                 } else {
+                                  // End condition
                                   $scope.remaining = 0;
                                   $scope.progress = 100;
                                   return;
@@ -212,6 +266,7 @@
                           updateMidInitial();
                           return;
                         } else {
+                          // End condition
                           $scope.remaining = 0;
                           $scope.progress = 100;
                           return;
@@ -241,7 +296,7 @@
                  */
                 // Data passed through global variables
                 function updateTitleAndGender() {
-                  // Fix offset
+                  // Fix offset -> iterate through list depending on offset
                   while(i >= 5000){
                     count -= 5000;
                     i -= 5000;
@@ -283,6 +338,7 @@
                                         updateTitleAndGender();
                                         return;
                                       } else {
+                                        // End condition
                                         $scope.remaining = 0;
                                         $scope.progress = 100;
                                         return;
@@ -292,10 +348,13 @@
                                 }
                               );
                             } else if(typeof res.data.title != "undefined"){
+                              // Checks for unique male titles
                               if(res.data.title.toString() == 'Mr.' || res.data.title.toString() == 'Rev.' || res.data.title.toString() == 'Fr.'){
                                 gender = 'Male';
+                              // Checks for unique female titles
                               } else if(res.data.title.toString() == 'Mrs.' || res.data.title.toString() == 'Miss.' || res.data.title.toString() == 'Ms.'){
                                 gender = 'Female';
+                              // Check for existing gender and last letter excetions
                               } else{
                                 if(gen.data.gender.toString() == 'male'){
                                   gender = 'Male';
@@ -321,6 +380,7 @@
                                     updateTitleAndGender();
                                     return;
                                   } else {
+                                    // End condition
                                     $scope.remaining = 0;
                                     $scope.progress = 100;
                                     return;
@@ -350,6 +410,7 @@
                                         updateTitleAndGender();
                                         return;
                                       } else {
+                                        // End condition
                                         $scope.remaining = 0;
                                         $scope.progress = 100;
                                         return;
@@ -359,6 +420,7 @@
                                 }
                               );
                             } else {
+                              // Check for existing gender and last letter excetions
                               if(gen.data.gender.toString() == 'male'){
                                 gender = 'Male';
                               } else if(gen.data.gender.toString() == 'female'){
@@ -383,6 +445,7 @@
                                   updateTitleAndGender();
                                   return;
                                 } else {
+                                  // End condition
                                   $scope.remaining = 0;
                                   $scope.progress = 100;
                                   return;
@@ -411,6 +474,7 @@
                                         updateTitleAndGender();
                                         return;
                                       } else {
+                                        // End condition
                                         $scope.remaining = 0;
                                         $scope.progress = 100;
                                         return;
@@ -438,6 +502,7 @@
                           updateTitleAndGender();
                           return;
                         } else {
+                          // End condition
                           $scope.remaining = 0;
                           $scope.progress = 100;
                           return;
@@ -460,82 +525,104 @@
                  */
                 // Data passed through global variables
                 function FIXTitleAndGender() {
+                  // Establishes a recursive sub-function
                   function recursiveFIXTitleAndGender(fam){
                     if(j == fam.data.count){
-                      // recurse
+                      // Recursive iteration and stat output
                       ++i;
                       $scope.remaining = listId.length - i;
                       $scope.progress = (1 - ($scope.remaining / listId.length)) * 100;
                       if(i < listId.length){
+                        // Recursive call
                         FIXTitleAndGender();
                       } else {
+                        // End statistics
                         $scope.remaining = 0;
                         $scope.progress = 100;
                       }
+                      // Terminate call
                       return;
+                    // Checks if the constituent has any relationships with the "spouse" tag
                     } else if(fam.data.value[j].is_spouse == true || fam.data.value[j].reciprocal_type == 'Spouse' || fam.data.value[j].type == 'Spouse'){
+                      // Swaps title from Ms. to Mrs. via PATCH
                       $http.patch('/api/constituents/titleSwap/' + listId[i].toString()).then(
                         function(){
+                          // Confirms change via GET
                           $http.get('/api/constituents/TG/post/live/' + listId[i].toString()).then(
                             function(){
+                              // Terminates recursion
                               return;
                             }
                           );
                         }
                       );
                     } else {
+                      // Iterates recursive helper function
                       ++j;
                       recursiveFIXTitleAndGender(fam);
                       return;
                     }
                   }
+                  // Aquire and print Name and Title in question
                   $http.get('/api/titleSwap/pre/live/' + listId[i].toString()).then(
                     function(res){
+                      // Checks if the title is "Ms."
                       if(typeof res.data.title != "undefined"){
                         if(res.data.title.toString() == "Ms."){
+                          // Aquire a list of the constituent relationships
                           $http.get('/api/constituentrelationships/' + listId[i].toString()).then(
                             function(fam){
+                              // Sets up and calls recursive spouse search
                               j = 0;
                               recursiveFIXTitleAndGender(fam);
                               setTimeout(function(){
-                                // recurse
+                                // Recursive iteration and stat output
                                 ++i;
                                 $scope.remaining = listId.length - i;
                                 $scope.progress = (1 - ($scope.remaining / listId.length)) * 100;
                                 if(i < listId.length){
+                                  // Recursive call
                                   FIXTitleAndGender();
                                 } else {
+                                  // End statistics
                                   $scope.remaining = 0;
                                   $scope.progress = 100;
                                 }
+                                // Terminate recusion
                                 return;
                               }, 5000);
                             }
                           );
                         } else {
-                          // recurse
+                          // Recursive iteration and stat output
                           ++i;
                           $scope.remaining = listId.length - i;
                           $scope.progress = (1 - ($scope.remaining / listId.length)) * 100;
                           if(i < listId.length){
+                            // Recursive call
                             FIXTitleAndGender();
                           } else {
+                            // End statistics
                             $scope.remaining = 0;
                             $scope.progress = 100;
                           }
+                          // Terminate recusion
                           return;
                         }
                       } else {
-                        // recurse
+                        // Recursive iteration and stat output
                         ++i;
                         $scope.remaining = listId.length - i;
                         $scope.progress = (1 - ($scope.remaining / listId.length)) * 100;
                         if(i < listId.length){
+                          // Recursive call
                           FIXTitleAndGender();
                         } else {
+                          // End statistics
                           $scope.remaining = 0;
                           $scope.progress = 100;
                         }
+                        // Terminate recusion
                         return;
                       }
                     }
