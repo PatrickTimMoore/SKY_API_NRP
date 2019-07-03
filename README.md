@@ -28,3 +28,5 @@ Does the correct statistic and test information get outputted? If not, simply ad
 ## Note to Developers
 
 Constituent ID is used in the API and is equivalent to the System ID
+
+Add sky.env to any folder/application you use. sky.env is not included on GitHub for security reasons, but a template is available in the root of the branch.
