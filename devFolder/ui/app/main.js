@@ -629,6 +629,30 @@
                   );
                 }
 
+                /*
+                 * updatePhone()
+                 *
+                 * STATUS: IP
+                 *
+                 * Updates Phone from use
+                 * Input: var i (global)
+                 *        var j (global)
+                 *        var listId (global)
+                 * Output: All changes are logged in <date-time>.txt
+                 */
+
+                function updatePhone(){
+                  $http.get('/api/constituents/phone/pre/' + listId[i].toString()).then(
+                    function(){
+                      ++i;
+                      if(i < listId.length){
+                        updatePhone();
+                      }
+                    }
+                  )
+                }
+
+
                 /**
                   *  Testing Zone
                   */
@@ -683,7 +707,7 @@
 
                 /*
                  * THE FOLLOWING IS FOR FIXTitleAndGender()
-                 */
+                 *//*
                 $http.get('/api/csv/' + fileName).then(
                   function(res){
                     listId = res.data;
@@ -692,18 +716,20 @@
                       FIXTitleAndGender();
                     }
                   }
+                );*/
+
+                /*
+                 * THE FOLLOWING IS FOR updatePhone()
+                 */
+                $http.get('/api/csv/' + fileName).then(
+                  function(res){
+                    listId = res.data;
+                    i = 0; // Modify with offset on failure
+                    if(i < listId.length){
+                      updatePhone();
+                    }
+                  }
                 );
-                /*setTimeout(function(){
-                  console.log($scope['constituentcodes0'].count);
-                  count = $scope['constituentcodes0'].count;
-                  countInit = count;
-                  i = (count - 1000); // replace with (count - crash#);
-                  j = 0;
-                  string = 'constituentcodes' + j.toString();
-                  setTimeout(function(){
-                    FIXTitleAndGender();
-                  }, 350);
-                }, 10000);*/
             });
 
 

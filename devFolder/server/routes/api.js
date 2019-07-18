@@ -465,6 +465,40 @@
           response.send(results);
         });
     }
+    /**
+     * Gets a list of constituent phone numbers by ID
+     * @name getPrePhone
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} request.params.constituentId
+     * @returns {string}
+     */
+    function getPrePhone(request, response) {
+        Sky.getPhone(request, request.params.constituentId, function (results) {
+            fs.appendFile(dateString, (JSON.stringify(results, null, '\t') + '\n'), (err) => {
+              if (err) console.log(err);
+              console.log("Get Successfully Written to File.");
+            });
+            response.send(results);
+        });
+    }
+    /**
+     * Gets a list of constituent phone numbers by ID
+     * @name getPostPhone
+     * @param {Object} request
+     * @param {Object} response
+     * @param {string} request.params.constituentId
+     * @returns {string}
+     */
+    function getPostPhone(request, response) {
+        Sky.getPhone(request, request.params.constituentId, function (results) {
+            fs.appendFile(dateString, ' => \n' + (JSON.stringify(results, null, '\t') + '\n'), (err) => {
+              if (err) console.log(err);
+              console.log("Get Successfully Written to File.");
+            });
+            response.send(results);
+        });
+    }
     /* exports functions to global variables */
     module.exports = {
         getConstituent: getConstituent,
@@ -491,6 +525,8 @@
         patchGender: patchGender,
         getCSVid: getCSVid,
         titleSwap: titleSwap,
-        preTitleSwap: preTitleSwap
+        preTitleSwap: preTitleSwap,
+        getPrePhone: getPrePhone,
+        getPostPhone: getPostPhone
     };
 }());

@@ -33,6 +33,18 @@
 
 
     /**
+     * Gets the requested constituent phone numbers
+     * @name getPhone
+     * @param {Object} request
+     * @param {string} constituentId Id of the constituent to retrieve
+     * @param {Function} callback
+     */
+    function getPhone(request, constituentId, callback) {
+        get(request, 'constituents/' + constituentId + '/phones', callback);
+    }
+
+
+    /**
      * Gets the requested constituent
      * @name getConstituentCodes
      * @param {Object} request
@@ -157,6 +169,7 @@
      */
     module.exports = {
         getConstituent: getConstituent,
+        getPhone: getPhone,
         getConstituentCodes: getConstituentCodes,
         getConstituentRelationships: getConstituentRelationships,
         getConstituentSearch: getConstituentSearch,

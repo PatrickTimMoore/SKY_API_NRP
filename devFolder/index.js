@@ -43,6 +43,8 @@
 
     // Register our SKY API GET routes.
     app.get('/api/constituents/:constituentId', routes.auth.checkSession, routes.api.getConstituent);
+    app.get('/api/constituents/phone/pre/:constituentId', routes.auth.checkSession, routes.api.getPrePhone);
+    app.get('/api/constituents/phone/post/:constituentId', routes.auth.checkSession, routes.api.getPostPhone);
     app.get('/api/constituents/name/pre/live/:constituentId', routes.auth.checkSession, routes.api.getConstituentNamePre);
     app.get('/api/constituents/name/post/live/:constituentId', routes.auth.checkSession, routes.api.getConstituentNamePost);
     app.get('/api/constituentcodes/:offset', routes.auth.checkSession, routes.api.getConstituentCodes);
